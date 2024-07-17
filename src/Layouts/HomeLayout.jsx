@@ -4,6 +4,7 @@ import { FiMenu } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
+import { logout } from "../Redux/Slices/AuthSlice";
 const HomeLayout = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,6 +22,17 @@ const HomeLayout = ({ children }) => {
     element[0].checked = false;
     const drawerSide = document.getElementsByClassName("drawer-side");
     drawerSide[0].style.width = 0;
+  };
+
+
+  const handleLogout = async (event) => {
+    event.preventDefault();
+
+    // calling logout action
+    const res = await dispatch(logout());
+
+    // redirect to home page if true
+    if (res?.payload?.success) navigate("/");
   };
 
   return (
@@ -77,16 +89,16 @@ const HomeLayout = ({ children }) => {
             )}
 
             {isLoggedIn && (
-              <li className="absolute bottom-4 w-[90%]">
-                <div className="w-full flex items-center justify-center">
-                  <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full">
+              <div className="absolute bottom-4  w-[90%]">
+                <div className="w-full flex gap-4 items-center justify-center">
+                  <button className="btn-primary px-4  text-white py-1 font-semibold bg-slate-600 rounded-md w-full">
                     <Link to="/user/profile">Profile</Link>
                   </button>
-                  <button className="btn-secondary px-4 py-1 font-semibold rounded-md w-full">
+                  <button className="btn-secondary px-4 bg-red-600 text-white  hover:bg-red-500 py-1 font-semibold rounded-md w-full">
                     <Link onClick={handleLogout}>Logout</Link>
                   </button>
                 </div>
-              </li>
+              </div>
             )}
           </ul>
         </div>
